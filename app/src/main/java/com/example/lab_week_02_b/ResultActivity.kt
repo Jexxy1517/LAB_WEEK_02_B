@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -22,22 +23,22 @@ class ResultActivity : AppCompatActivity() {
         if (intent != null) {
             val colorCode = intent.getStringExtra(COLOR_KEY)
 
-            val backgroundScreen =
-                findViewById<ConstraintLayout>(R.id.background_screen)
+            val backgroundScreen = findViewById<ConstraintLayout>(R.id.background_screen)
 
             try {
                 backgroundScreen.setBackgroundColor(Color.parseColor("#$colorCode"))
-
-                val resultMessage =
-                    findViewById<TextView>(R.id.color_code_result_message)
+                val resultMessage = findViewById<TextView>(R.id.color_code_result_message)
                 resultMessage.text = getString(R.string.color_code_result_message, colorCode?.uppercase())
-
             } catch (ex: IllegalArgumentException) {
-                Intent().let { errorIntent ->
-                    errorIntent.putExtra(ERROR_KEY, true)
-                    setResult(Activity.RESULT_OK, errorIntent)
-                    finish()
-                }
+                setResult(Activity.RESULT_OK, Intent().putExtra(ERROR_KEY, true))
+                finish()
+            }
+
+            // Menambahkan listener untuk tombol BACK
+            val backButton = findViewById<Button>(R.id.back_button)
+            backButton.setOnClickListener {
+                finish() // Menutup ResultActivity dan kembali ke activity sebelumnya
+                // tambahan comment ini cuman biar bisa update push ke github
             }
         }
     }
